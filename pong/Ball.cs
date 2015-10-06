@@ -34,6 +34,14 @@ namespace pong
                  && x  <= Program.playerOne.batPos[Program.playerOne.batPos.Count-1]
                  && x  >= Program.playerOne.batPos[0])
             {
+                if (   x >= Program.playerOne.batPos[((Program.playerOne.batPos.Count - 1)*3 / 4)])
+                {
+                    xDirection = 1;
+                }
+                if ( x <= Program.playerOne.batPos[((Program.playerOne.batPos.Count - 1) / 4)])
+                {
+                    xDirection = -1;
+                }
                 yDirection *= -1;
                 
             }

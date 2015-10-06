@@ -34,8 +34,9 @@ namespace pong
             inputThread.Start();
              ball = new Ball(5,5,"x");
 
-             ballThread.Start();
              playerOne = new Player(5, 10, "T");
+
+             ballThread.Start();
             while (true)
             {
                 playerOne.Update();
