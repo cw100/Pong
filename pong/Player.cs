@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows.Input;
+
 namespace pong
 {
+
     class Player
     {
         public List<int> batPos;
@@ -14,12 +17,16 @@ namespace pong
         int speed = 50;
        public int x;
        public int y;
-        int direction;
-        Thread inputThread;
+        public int direction;
 
-        public Player(int intX,int intY, string Icon)
+        Thread inputThread;
+        Key leftKey, rightKey;
+
+
+        public Player(int intX, int intY, string Icon, Key leftkey, Key rightkey)
         {
-            
+            leftKey = leftkey;
+            rightKey = rightkey;
                 x = intX;
             y = intY;
             icon = Icon;
@@ -31,24 +38,27 @@ namespace pong
             foreach(int pos in batPos)
                 Program.grid.set(pos, y, icon);
             inputThread = new Thread(input);
+            inputThread.SetApartmentState(ApartmentState.STA);
             inputThread.Start();
         }
+        
         public void input()
         {
             while (true)
             {
-                new System.Threading.ManualResetEvent(false).WaitOne(10);
 
-                switch (Program.input.Key)
-                {
-                    case ConsoleKey.LeftArrow:
+                Thread.Sleep(10);
+                if (Keyboard.IsKeyDown(leftKey) )
+                     {
                         direction = -1;
-                        break;
-                    case ConsoleKey.RightArrow:
+                    }
+
+                else if (Keyboard.IsKeyDown(rightKey))
+                     {
                         direction = 1;
-                        break;
+                      }
                      
-                }
+                
             }
         }
         public void Update()
@@ -56,24 +66,33 @@ namespace pong
 
             if (batPos[batPos.Count - 1] + direction < Program.grid.length && batPos[0] + direction >= 0)
             {
-                
+               
                 if (direction == 1)
                 {
                     
-                    Program.grid.set(batPos[0], y, " ");
+                    Program.grid.set(batPos[0], y," ");
                     batPos.RemoveAt(0);
                     batPos.Add(batPos[batPos.Count - 1]+1);
-                    Program.grid.set(batPos[batPos.Count - 1], y, icon);
+                    foreach (int pos in batPos)
+                    {
+                        Program.grid.set(pos, y, icon);
+                    }
+                   
                 }
                 if (direction == -1)
                 {
-                    Program.grid.set(batPos[batPos.Count - 1], y, " ");
+                    Program.grid.set(batPos[batPos.Count - 1], y," ");
                     batPos.RemoveAt(batPos.Count - 1);
                     batPos.Insert(0, batPos[0] - 1);
-                    Program.grid.set(batPos[0], y, icon);
+                    foreach (int pos in batPos)
+                    {
+                        Program.grid.set(pos, y, icon);
+                    }
                 }
                
             }
+           
+            
             direction = 0;
             Thread.Sleep(speed);
 

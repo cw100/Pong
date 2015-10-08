@@ -30,13 +30,28 @@ namespace pong
             if (0 <= x && x < length && 0 <= y && y < height)
             {
 
+                grid[x + (y * length)].lastIcon = grid[x + (y * length)].icon;
                 grid[x + (y * length)].icon = str;
+                
                 grid[x + (y * length)].updated = true;
             }
             else
             {
                 throw Exception("dskfj");
         }
+        }
+        public void set(int x, int y)
+        {
+            if (0 <= x && x < length && 0 <= y && y < height)
+            {
+                grid[x + (y * length)].icon = grid[x + (y * length)].lastIcon;
+                grid[x + (y * length)].lastIcon = grid[x + (y * length)].icon;
+                grid[x + (y * length)].updated = true;
+            }
+            else
+            {
+                throw Exception("dskfj");
+            }
         }
 
         private Exception Exception(string p)

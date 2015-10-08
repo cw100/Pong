@@ -9,9 +9,10 @@ namespace pong
     class GridBox
     {
         public string icon;
+        public string lastIcon=" ";
         int x;
         int y;
-       public bool updated=true;
+        public bool updated=true;
         public GridBox(int xLocation, int yLocation)
        {
             icon = " ";
