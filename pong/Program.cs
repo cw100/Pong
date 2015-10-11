@@ -14,20 +14,29 @@ namespace pong
         static  List<Thread> playerThreads;
         public static Grid grid;
         public static List<Player> players;
-        public static List<ConsoleKey> inputs;
-        static Thread inputThread= new Thread(Input);
-        static Thread ballThread = new Thread(BallUpdate);
+        
+        static List<Ball> balls;
          static Ball ball;
-        static void Input()
-        {
+         static List<Thread> ballThreads;
+        static void AddBall(int x, int y)
+         {
+
+             ball = new Ball(x, y, "O");
+             balls.Add(ball);
+             int ballnum = balls.Count - 1;
+             Thread ballThread = new Thread(() => BallUpdate(ballnum));
+             
+             
+             ballThreads.Add(ballThread);
+
+             ballThread.Start();
             
-              
-        }
-        static void BallUpdate()
+         }
+        static void BallUpdate(int ballNum)
         {
             while (true)
             {
-                ball.Update();
+                balls[ballNum].Update();
             }
         }
         static void PlayerUpdate(int playerNum)
@@ -41,8 +50,12 @@ namespace pong
         {
             grid = new Grid(Console.WindowWidth - 1, Console.WindowHeight);
             Console.CursorVisible = false;
-            inputThread.Start();
-            ball = new Ball(Console.WindowWidth / 2, Console.WindowHeight/2, "x");
+            balls = new List<Ball>();
+            ballThreads = new List<Thread>();
+
+            AddBall(2, Console.WindowHeight / 2);
+            AddBall(Console.WindowWidth / 2, Console.WindowHeight / 2);
+
              players = new List<Player>();
              playerStart = new Player((Console.WindowWidth -10)/ 2, Console.WindowHeight - 3, "=", Key.Left, Key.Right);
              players.Add(playerStart);
@@ -50,6 +63,7 @@ namespace pong
              
              players.Add(playerStart);
              playerThreads = new List<Thread>();
+
              Thread playerThread = new Thread(() => PlayerUpdate(0));
              playerThreads.Add(playerThread);
               playerThread = new Thread(() => PlayerUpdate(1));
@@ -58,7 +72,8 @@ namespace pong
             {
                 plyerThread.Start();
             }
-                ballThread.Start();
+       
+            
             while (true)
             {
                 
