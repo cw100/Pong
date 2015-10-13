@@ -18,13 +18,19 @@ namespace pong
        public int x;
        public int y;
         public int direction;
-
+        int playerNum;
         Thread inputThread;
         Key leftKey, rightKey;
 
-
-        public Player(int intX, int intY, string Icon, Key leftkey, Key rightkey)
+        Thread aiThread;
+        public Player(int intX, int intY, string Icon, Key leftkey, Key rightkey,int playernum)
         {
+            playerNum = playernum;
+            if(playerNum  ==2)
+            {
+                aiThread = new Thread(Ai);
+                aiThread.Start();
+            }
             leftKey = leftkey;
             rightKey = rightkey;
                 x = intX;
@@ -63,41 +69,83 @@ namespace pong
         }
         public void Update()
         {
-
-            if (batPos[batPos.Count - 1] + direction < Program.grid.length && batPos[0] + direction >= 0)
-            {
-               
-                if (direction == 1)
-                {
-                    
-                    Program.grid.set(batPos[0], y," ");
-                    batPos.Add(batPos[batPos.Count - 1]+1);
-
-                    batPos.RemoveAt(0);
-                    foreach (int pos in batPos)
-                    {
-                        Program.grid.set(pos, y, icon);
-                    }
-                   
-                }
-                if (direction == -1)
-                {
-                    Program.grid.set(batPos[batPos.Count - 1], y," ");
-                    
-                    batPos.Insert(0, batPos[0] - 1);
-                    batPos.RemoveAt(batPos.Count - 1);
-                    foreach (int pos in batPos)
-                    {
-                        Program.grid.set(pos, y, icon);
-                    }
-                }
-               
-            }
            
-            
-            direction = 0;
-            Thread.Sleep(speed);
+                if (batPos[batPos.Count - 1] + direction < Program.grid.length && batPos[0] + direction >= 0)
+                {
 
+                    if (direction == 1)
+                    {
+
+                        Program.grid.set(batPos[0], y, " ");
+                        batPos.Add(batPos[batPos.Count - 1] + 1);
+
+                        batPos.RemoveAt(0);
+                        foreach (int pos in batPos)
+                        {
+                            Program.grid.set(pos, y, icon);
+                        }
+
+                    }
+                    if (direction == -1)
+                    {
+                        Program.grid.set(batPos[batPos.Count - 1], y, " ");
+
+                        batPos.Insert(0, batPos[0] - 1);
+                        batPos.RemoveAt(batPos.Count - 1);
+                        foreach (int pos in batPos)
+                        {
+                            Program.grid.set(pos, y, icon);
+                        }
+                    }
+
+                }
+
+               
+                
+
+                if (playerNum == 1)
+                {
+
+                    direction = 0;
+                    Thread.Sleep(20);
+                }
+                else
+                {
+                    Thread.Sleep(aiRand.Next(40, 70));
+                }
+
+
+        }
+        Random aiRand = new Random();
+        public void Ai()
+        {
+            while (true)
+            {
+                if (Program.balls.Count != 0)
+                {
+                    Thread.Sleep(aiRand.Next(100,200));
+                    try
+                    {
+                        if (Program.balls[0].x > batPos[batPos.Count -3])
+                        {
+                            direction = 1;
+                        }
+                        else
+                            if (Program.balls[0].x < batPos[2])
+                            {
+                                direction = -1;
+                            }
+                            else
+                            {
+                                direction = 0;
+                            }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
         }
     }
 }
