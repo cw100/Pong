@@ -10,6 +10,8 @@ namespace pong
 {
     class Ball
     {
+        public bool active = true;
+        bool scoringActive =true;
         public int x;
         public int y;
        
@@ -26,40 +28,32 @@ namespace pong
         xDirection = 0;
         yDirection = -1;
     }
+        bool inPlayer=false;
         public void Update()
         {
-            
-            Program.grid.set(x, y);
-           
-            foreach (Player player in Program.players)
+            while (active)
             {
-                if (y + yDirection == player.y
-                 && x + xDirection <= player.batPos[player.batPos.Count - 1]
-                 && x + xDirection >= player.batPos[0]
-                   )
-            {
-                if (x >= player.batPos[((player.batPos.Count - 1) * 3 / 4)])
+                inPlayer = false;
+                foreach (Player player in Program.players)
                 {
-                    if (1 > xDirection)
+                    if (y == player.y
+                     && x <= player.batPos[player.batPos.Count - 1]
+                     && x >= player.batPos[0]
+                       )
                     {
-                        xDirection += 1;
+                        inPlayer = true;
                     }
                 }
-                if (x <= player.batPos[((player.batPos.Count - 1) / 4)])
+                if (!inPlayer)
                 {
-                    if (xDirection > -1)
-                    {
-                        xDirection -= 1;
-                    }
+                    Program.grid.set(x, y, " ");
                 }
-                yDirection *= -1;
-                
-            }
-                else
+                foreach (Player player in Program.players)
+                {
                     if (y + yDirection == player.y
-                    && x  <= player.batPos[player.batPos.Count - 1]
-                    && x  >= player.batPos[0]
-                      )
+                     && x + xDirection <= player.batPos[player.batPos.Count - 1]
+                     && x + xDirection >= player.batPos[0]
+                       )
                     {
                         if (x >= player.batPos[((player.batPos.Count - 1) * 3 / 4)])
                         {
@@ -79,63 +73,124 @@ namespace pong
 
                     }
                     else
-                if (y  == player.y
-                   && x + xDirection <= player.batPos[player.batPos.Count - 1]
-                   && x + xDirection >= player.batPos[0]
-                     )
-                {
-                    if (x >= player.batPos[((player.batPos.Count - 1) * 3 / 4)])
-                    {
-                        if (1 > xDirection)
+                        if (y + yDirection == player.y
+                        && x <= player.batPos[player.batPos.Count - 1]
+                        && x >= player.batPos[0]
+                          )
                         {
-                            xDirection += 1;
+                            if (x >= player.batPos[((player.batPos.Count - 1) * 3 / 4)])
+                            {
+                                if (1 > xDirection)
+                                {
+                                    xDirection += 1;
+                                }
+                            }
+                            if (x <= player.batPos[((player.batPos.Count - 1) / 4)])
+                            {
+                                if (xDirection > -1)
+                                {
+                                    xDirection -= 1;
+                                }
+                            }
+                            yDirection *= -1;
+
                         }
-                    }
-                    if (x <= player.batPos[((player.batPos.Count - 1) / 4)])
-                    {
-                        if (xDirection > -1)
-                        {
-                            xDirection -= 1;
-                        }
-                    }
+                        else
+                            if (y == player.y
+                               && x + xDirection <= player.batPos[player.batPos.Count - 1]
+                               && x + xDirection >= player.batPos[0]
+                                 )
+                            {
+                                if (x >= player.batPos[((player.batPos.Count - 1) * 3 / 4)])
+                                {
+                                    if (1 > xDirection)
+                                    {
+                                        xDirection += 1;
+                                    }
+                                }
+                                if (x <= player.batPos[((player.batPos.Count - 1) / 4)])
+                                {
+                                    if (xDirection > -1)
+                                    {
+                                        xDirection -= 1;
+                                    }
+                                }
+
+                            }
 
                 }
-                
-        }
-            if (y + yDirection < 0)
-            {
-                yDirection *= -1;
-                y = 0;
+                if (scoringActive)
+                {
+                    if (y + yDirection < 0)
+                    {
+                        Program.playerTwoScore += 1;
+                        Program.grid.set(x, y, " ");
+                        active = false;
 
-            }
-            if (y + yDirection >= Program.grid.height)
-            {
-                yDirection *= -1;
-                y = Program.grid.height;
-                y += yDirection;
-            }
-            if (x + xDirection < 0)
-            {
+                    }
+                }
+                else
+                {
+                    if (y + yDirection < 0)
+                    {
+                        yDirection *= -1;
+                        y = 0;
 
-                xDirection *= -1;
-                x = 0;
-               
-            }
-            if (x + xDirection >= Program.grid.length)
-            {
-                xDirection *= -1;
-                x = Program.grid.length;
+                    }
+                }
+                if (scoringActive)
+                {
+                    if (y + yDirection >= Program.grid.height)
+                    {
+                        Program.playerOneScore += 1;
+                        Program.grid.set(x, y, " ");
+                        active = false;
+                    }
+                }
+                else
+                {
+                    if (y + yDirection >= Program.grid.height)
+                    {
+                        yDirection *= -1;
+                        y = Program.grid.height;
+                        y += yDirection;
+                    }
+                }
+                if (x + xDirection < 0)
+                {
+
+                    xDirection *= -1;
+                    x = 0;
+
+                }
+                if (x + xDirection >= Program.grid.length)
+                {
+                    xDirection *= -1;
+                    x = Program.grid.length;
+                    x += xDirection;
+                }
+
                 x += xDirection;
+                y += yDirection;
+                foreach (Player player in Program.players)
+                {
+                    if (y == player.y
+                     && x <= player.batPos[player.batPos.Count - 1]
+                     && x >= player.batPos[0]
+                       )
+                    {
+                        inPlayer = true;
+                    }
+                }
+                inPlayer = false;
+                if (!inPlayer&&active)
+                {
+                    Program.grid.set(x, y, ballString);
+                }
+
+                Thread.Sleep(50);
             }
             
-            x += xDirection;
-            y += yDirection;
-            
-           
-                       
-            Program.grid.set(x, y, ballString);
-
-            Thread.Sleep(75);
         }
         
     }

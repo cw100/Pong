@@ -14,7 +14,7 @@ namespace pong
         public List<int> batPos;
        public int length=11;
         string icon;
-        int speed = 50;
+        int speed = 10;
        public int x;
        public int y;
         public int direction;
@@ -71,8 +71,9 @@ namespace pong
                 {
                     
                     Program.grid.set(batPos[0], y," ");
-                    batPos.RemoveAt(0);
                     batPos.Add(batPos[batPos.Count - 1]+1);
+
+                    batPos.RemoveAt(0);
                     foreach (int pos in batPos)
                     {
                         Program.grid.set(pos, y, icon);
@@ -82,8 +83,9 @@ namespace pong
                 if (direction == -1)
                 {
                     Program.grid.set(batPos[batPos.Count - 1], y," ");
-                    batPos.RemoveAt(batPos.Count - 1);
+                    
                     batPos.Insert(0, batPos[0] - 1);
+                    batPos.RemoveAt(batPos.Count - 1);
                     foreach (int pos in batPos)
                     {
                         Program.grid.set(pos, y, icon);
