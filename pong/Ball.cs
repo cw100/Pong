@@ -19,14 +19,14 @@ namespace pong
         public int yDirection;
         public int xDirection;
         public string ballString;
-        public Ball(int intX, int intY, string ballstring)
+        public Ball(int intX, int intY,int ydirection, string ballstring)
     {
         x = intX;
         y = intY;
         Speed = 100;
         ballString = ballstring;
         xDirection = 0;
-        yDirection = -1;
+        yDirection = ydirection;
     }
         bool inPlayer=false;
         public void Update()
