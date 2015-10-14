@@ -12,33 +12,33 @@ namespace pong
     {
         static Thread scoreThread;
         public static Player playerStart;
-        static  List<Thread> playerThreads;
+        static List<Thread> playerThreads;
         public static Grid grid;
         public static List<Player> players;
-        public static int playerOneScore=0;
-        public static int playerTwoScore=0;
-       public static List<Ball> balls;
-         static Ball ball;
-         static List<Thread> ballThreads;
+        public static int playerOneScore = 0;
+        public static int playerTwoScore = 0;
+        public static List<Ball> balls;
+        static Ball ball;
+        static List<Thread> ballThreads;
         static void AddBall(int x, int y)
-         {
-            if(playerOneScore>=playerTwoScore)
+        {
+            if (playerOneScore >= playerTwoScore)
             {
-             ball = new Ball(x, y,-1, "O");
+                ball = new Ball(x, y, -1, "O");
             }
             else
             {
                 ball = new Ball(x, y, 1, "O");
             }
-             balls.Add(ball);
-             Thread ballThread = new Thread(() => BallUpdate(ball));
-             
-             
-             ballThreads.Add(ballThread);
+            balls.Add(ball);
+            Thread ballThread = new Thread(() => BallUpdate(ball));
 
-             ballThread.Start();
-            
-         }
+
+            ballThreads.Add(ballThread);
+
+            ballThread.Start();
+
+        }
         static void BallUpdate(Ball ball)
         {
             while (ball.active)
@@ -63,7 +63,7 @@ namespace pong
         static bool active = true;
         static void Main(string[] args)
         {
-            Console.Title="Pong";
+            Console.Title = "Pong";
             Console.SetWindowSize(75, 30);
 
             Console.SetBufferSize(75, 30);
@@ -71,29 +71,29 @@ namespace pong
             Console.CursorVisible = false;
             balls = new List<Ball>();
             ballThreads = new List<Thread>();
-             players = new List<Player>();
-             playerStart = new Player((grid.length - 10) / 2, grid.height - 3, "=", Key.Left, Key.Right,1);
-             players.Add(playerStart);
-             playerStart = new Player((grid.length -10)/ 2, 2, "=", Key.A, Key.D,2);
-             
-             players.Add(playerStart);
-             playerThreads = new List<Thread>();
+            players = new List<Player>();
+            playerStart = new Player((grid.length - 10) / 2, grid.height - 3, "=", Key.Left, Key.Right, 1);
+            players.Add(playerStart);
+            playerStart = new Player((grid.length - 10) / 2, 2, "=", Key.A, Key.D, 2);
 
-             Thread playerThread = new Thread(() => PlayerUpdate(0));
-             playerThreads.Add(playerThread);
-              playerThread = new Thread(() => PlayerUpdate(1));
-              playerThreads.Add(playerThread);
+            players.Add(playerStart);
+            playerThreads = new List<Thread>();
 
-            foreach(Thread plyerThread in playerThreads)
+            Thread playerThread = new Thread(() => PlayerUpdate(0));
+            playerThreads.Add(playerThread);
+            playerThread = new Thread(() => PlayerUpdate(1));
+            playerThreads.Add(playerThread);
+
+            foreach (Thread plyerThread in playerThreads)
             {
                 plyerThread.Start();
             }
 
 
             AddBall(grid.length / 2, grid.height / 2);
-            for(int i = 0; i<Console.WindowHeight;i++)
+            for (int i = 0; i < Console.WindowHeight; i++)
             {
-                Console.SetCursorPosition(Console.WindowWidth-19,i);
+                Console.SetCursorPosition(Console.WindowWidth - 19, i);
                 Console.Write("|");
             }
             while (active)
@@ -102,10 +102,10 @@ namespace pong
                 grid.Update();
 
                 DrawScore();
-                
-                if(balls.Count<1)
+
+                if (balls.Count < 1)
                 {
-                    AddBall(grid.length / 2+ balls.Count, grid.height / 2);
+                    AddBall(grid.length / 2 + balls.Count, grid.height / 2);
                 }
 
                 if (playerOneScore > 9 || playerTwoScore > 9)
@@ -123,7 +123,7 @@ namespace pong
                 winningPlayer = 2;
             }
             Console.Clear();
-            Console.SetCursorPosition((Console.WindowWidth-5 )/ 2, Console.WindowHeight / 2);
+            Console.SetCursorPosition((Console.WindowWidth - 5) / 2, Console.WindowHeight / 2);
             Console.Write("Player " + winningPlayer + " wins!");
             Console.ReadKey(true);
         }

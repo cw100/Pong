@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Input;
-
 namespace pong
 {
 
@@ -111,32 +110,36 @@ namespace pong
                 }
                 else
                 {
-                    Thread.Sleep(aiRand.Next(40, 70));
+                    Thread.Sleep(19);
                 }
 
 
         }
         Random aiRand = new Random();
+        int aiHitPos=0;
         public void Ai()
         {
             while (true)
             {
                 if (Program.balls.Count != 0)
                 {
-                    Thread.Sleep(aiRand.Next(100,200));
                     try
                     {
-                        if (Program.balls[0].x > batPos[batPos.Count -3])
+
+                        if (Program.balls[0].x > batPos[batPos.Count - (1+aiHitPos)])
                         {
+                            Thread.Sleep(50 );
                             direction = 1;
                         }
                         else
-                            if (Program.balls[0].x < batPos[2])
+                            if (Program.balls[0].x < batPos[aiHitPos])
                             {
+                                Thread.Sleep(50);
                                 direction = -1;
                             }
                             else
                             {
+                                aiHitPos = 4;
                                 direction = 0;
                             }
                     }

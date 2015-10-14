@@ -19,13 +19,14 @@ namespace pong
         public int yDirection;
         public int xDirection;
         public string ballString;
+        Random rand = new Random();
         public Ball(int intX, int intY,int ydirection, string ballstring)
     {
         x = intX;
         y = intY;
         Speed = 100;
         ballString = ballstring;
-        xDirection = 0;
+        xDirection = rand.Next(-1,2);
         yDirection = ydirection;
     }
         bool inPlayer=false;
@@ -55,19 +56,39 @@ namespace pong
                      && x + xDirection >= player.batPos[0]
                        )
                     {
-                        if (x >= player.batPos[((player.batPos.Count - 1) * 3 / 4)])
+                        
+                        if (x >= player.batPos[((player.batPos.Count - 1) * 6 / 10)])
                         {
-                            if (1 > xDirection)
+                            xDirection = 1;
+                            if (x >= player.batPos[((player.batPos.Count - 1) * 8 / 10)])
                             {
-                                xDirection += 1;
+                                xDirection = 2;
+                                if (x >= player.batPos[((player.batPos.Count - 1))])
+                                {
+
+                                    xDirection = 3;
+
+                                }
                             }
                         }
-                        if (x <= player.batPos[((player.batPos.Count - 1) / 4)])
+                        else
+                        if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
                         {
-                            if (xDirection > -1)
+                            xDirection = -1;
+                            if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
                             {
-                                xDirection -= 1;
+                                xDirection = -2;
+                                if (x <= player.batPos[((player.batPos.Count - 1) / 10)])
+                                {
+
+                                    xDirection = -3;
+
+                                }
                             }
+                        }
+                        else
+                        {
+                            xDirection =0;
                         }
                         yDirection *= -1;
 
