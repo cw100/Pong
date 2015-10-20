@@ -11,25 +11,27 @@ namespace pong
     class Ball
     {
         public bool active = true;
-        bool scoringActive =true;
+        bool scoringActive = true;
         public int x;
         public int y;
-       
+
         public int Speed;
         public int yDirection;
         public int xDirection;
         public string ballString;
         Random rand = new Random();
-        public Ball(int intX, int intY,int ydirection, string ballstring)
-    {
-        x = intX;
-        y = intY;
-        Speed = 100;
-        ballString = ballstring;
-        xDirection = rand.Next(-1,2);
-        yDirection = ydirection;
-    }
-        bool inPlayer=false;
+        public Ball(int intX, int intY, int ydirection, string ballstring)
+        {
+            x = intX;
+            y = intY;
+            Speed = 100;
+            ballString = ballstring;
+            xDirection = rand.Next(-1, 2);
+            yDirection = ydirection;
+        }
+        bool inPlayer = false;
+
+
         public void Update()
         {
             while (active)
@@ -52,11 +54,14 @@ namespace pong
                 foreach (Player player in Program.players)
                 {
                     if (y + yDirection == player.y
-                     && x + xDirection <= player.batPos[player.batPos.Count - 1]
-                     && x + xDirection >= player.batPos[0]
+                     && x <= player.batPos[player.batPos.Count - 1]
+                     && x >= player.batPos[0]
+                        || y + yDirection == player.y
+                        && x + xDirection <= player.batPos[player.batPos.Count - 1]
+                        && x + xDirection >= player.batPos[0]
                        )
                     {
-                        
+
                         if (x >= player.batPos[((player.batPos.Count - 1) * 6 / 10)])
                         {
                             xDirection = 1;
@@ -72,72 +77,28 @@ namespace pong
                             }
                         }
                         else
-                        if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
-                        {
-                            xDirection = -1;
                             if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
                             {
-                                xDirection = -2;
-                                if (x <= player.batPos[((player.batPos.Count - 1) / 10)])
+                                xDirection = -1;
+                                if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
                                 {
+                                    xDirection = -2;
+                                    if (x <= player.batPos[((player.batPos.Count - 1) / 10)])
+                                    {
 
-                                    xDirection = -3;
+                                        xDirection = -3;
 
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            xDirection =0;
-                        }
+                            else
+                            {
+                                xDirection = 0;
+                            }
                         yDirection *= -1;
 
                     }
-                    else
-                        if (y + yDirection == player.y
-                        && x <= player.batPos[player.batPos.Count - 1]
-                        && x >= player.batPos[0]
-                          )
-                        {
-                            if (x >= player.batPos[((player.batPos.Count - 1) * 3 / 4)])
-                            {
-                                if (1 > xDirection)
-                                {
-                                    xDirection += 1;
-                                }
-                            }
-                            if (x <= player.batPos[((player.batPos.Count - 1) / 4)])
-                            {
-                                if (xDirection > -1)
-                                {
-                                    xDirection -= 1;
-                                }
-                            }
-                            yDirection *= -1;
 
-                        }
-                        else
-                            if (y == player.y
-                               && x + xDirection <= player.batPos[player.batPos.Count - 1]
-                               && x + xDirection >= player.batPos[0]
-                                 )
-                            {
-                                if (x >= player.batPos[((player.batPos.Count - 1) * 3 / 4)])
-                                {
-                                    if (1 > xDirection)
-                                    {
-                                        xDirection += 1;
-                                    }
-                                }
-                                if (x <= player.batPos[((player.batPos.Count - 1) / 4)])
-                                {
-                                    if (xDirection > -1)
-                                    {
-                                        xDirection -= 1;
-                                    }
-                                }
-
-                            }
 
                 }
                 if (scoringActive)
@@ -204,15 +165,15 @@ namespace pong
                     }
                 }
                 inPlayer = false;
-                if (!inPlayer&&active)
+                if (!inPlayer && active)
                 {
                     Program.grid.set(x, y, ballString);
                 }
 
                 Thread.Sleep(50);
             }
-            
+
         }
-        
+
     }
 }
