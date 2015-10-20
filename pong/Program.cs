@@ -46,6 +46,7 @@ namespace pong
                 ball.Update();
             }
             balls.Remove(ball);
+            Thread.CurrentThread.Abort();
         }
         static void PlayerUpdate(int playerNum)
         {
@@ -53,6 +54,7 @@ namespace pong
             {
                 players[playerNum].Update();
             }
+            Thread.CurrentThread.Abort();
         }
         static void DrawScore()
         {
@@ -64,9 +66,9 @@ namespace pong
         static void Main(string[] args)
         {
             Console.Title = "Pong";
-            Console.SetWindowSize(75, 30);
+            Console.SetWindowSize(120, 30);
 
-            Console.SetBufferSize(75, 30);
+            Console.SetBufferSize(120, 30);
             grid = new Grid(Console.WindowWidth - 20, Console.WindowHeight);
             Console.CursorVisible = false;
             balls = new List<Ball>();

@@ -20,16 +20,15 @@ namespace pong
         int playerNum;
         Thread inputThread;
         Key leftKey, rightKey;
-
+        
         Thread aiThread;
         public Player(int intX, int intY, string Icon, Key leftkey, Key rightkey,int playernum)
         {
             playerNum = playernum;
-            if(playerNum  ==2)
-            {
+            
                 aiThread = new Thread(Ai);
                 aiThread.Start();
-            }
+            
             leftKey = leftkey;
             rightKey = rightkey;
                 x = intX;
@@ -68,7 +67,8 @@ namespace pong
         }
         public void Update()
         {
-           
+          
+
                 if (batPos[batPos.Count - 1] + direction < Program.grid.length && batPos[0] + direction >= 0)
                 {
 
@@ -99,24 +99,21 @@ namespace pong
 
                 }
 
-               
-                
 
-                if (playerNum == 1)
-                {
+
 
                     direction = 0;
-                    Thread.Sleep(20);
-                }
-                else
-                {
-                    Thread.Sleep(19);
-                }
+                    Thread.Sleep(10);
+                
+                
+            }
 
 
-        }
+        
         Random aiRand = new Random();
         int aiHitPos=0;
+        int targetX = 0;
+        bool targetChosen = false;
         public void Ai()
         {
             while (true)
@@ -125,23 +122,107 @@ namespace pong
                 {
                     try
                     {
-
-                        if (Program.balls[0].x > batPos[batPos.Count - (1+aiHitPos)])
+                        if( playerNum == 1)
                         {
-                            Thread.Sleep(50 );
-                            direction = 1;
-                        }
-                        else
-                            if (Program.balls[0].x < batPos[aiHitPos])
+                        if (Program.balls[0].yDirection == 1)
+                        {
+
+                            if (targetChosen == false)
                             {
-                                Thread.Sleep(50);
-                                direction = -1;
+                                aiHitPos = aiRand.Next(0, batPos.Count-1);
+
+                                targetX = Program.balls[0].x + (Program.balls[0].xDirection * ( y-Program.balls[0].y ) );
+
+                                if (targetX < 0)
+                                {
+                                    targetX *= -1;
+                                } 
+                                if (targetX > Program.grid.length)
+                                {
+                                    targetX = Program.grid.length - (targetX - Program.grid.length)-2;
+                                }
+                                if (targetX < 0)
+                                {
+                                    targetX *= -1;
+                                } 
+                                
+
+                                
+                                targetChosen = true;
+                            }
+                        }
+                        }
+                        if( playerNum == 2)
+                        {
+                        if (Program.balls[0].yDirection == -1)
+                        {
+
+                            if (targetChosen == false)
+                            {
+                                aiHitPos = aiRand.Next(0, batPos.Count - 1);
+
+                                targetX = Program.balls[0].x + (Program.balls[0].xDirection * (Program.balls[0].y - y) );
+
+                                if (targetX < 0)
+                                {
+                                    targetX *= -1;
+                                } 
+                                if (targetX > Program.grid.length)
+                                {
+                                    targetX = Program.grid.length - (targetX - Program.grid.length)-2;
+                                }
+                                if (targetX < 0)
+                                {
+                                    targetX *= -1;
+                                } 
+                                
+
+                                
+                                targetChosen = true;
+                            }
+                        }
+                        }
+
+
+                            if (targetChosen == true )
+                        {
+                            if (targetX > batPos[aiHitPos] && batPos[batPos.Count-1] != Program.grid.length-1)
+                            {
+                                direction = 1;
                             }
                             else
+                                if (targetX < batPos[aiHitPos]&&  batPos[0] !=0)
+                                {
+
+                                    direction = -1;
+                                }
+                                else
+                                {
+                                    
+                                    direction = 0;
+                                    if (playerNum == 1)
+                                    {
+                                        if (Program.balls[0].yDirection == -1)
+                                        {
+                                            targetChosen = false;
+                                        }
+                                    }
+                                    if (playerNum == 2)
+                                    {
+                                        if (Program.balls[0].yDirection == 1)
+                                        {
+                                            targetChosen = false;
+                                        }
+                                    }
+                                }
+
+                            
+                        }
+                            if (Program.balls[0].y < 0||Program.balls[0].y >Program.grid.height)
                             {
-                                aiHitPos = 4;
-                                direction = 0;
+                                targetChosen = false;
                             }
+                            
                     }
                     catch
                     {

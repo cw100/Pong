@@ -31,7 +31,112 @@ namespace pong
         }
         bool inPlayer = false;
 
+        public void WallCollision()
+        {
+            if (scoringActive)
+            {
+                if (y + yDirection < 0)
+                {
+                    Program.playerTwoScore += 1;
+                    Program.grid.set(x, y, " ");
+                    active = false;
 
+                }
+            }
+            else
+            {
+                if (y + yDirection < 0)
+                {
+                    yDirection *= -1;
+                    y = 0;
+
+                }
+            }
+            if (scoringActive)
+            {
+                if (y + yDirection >= Program.grid.height)
+                {
+                    Program.playerOneScore += 1;
+                    Program.grid.set(x, y, " ");
+                    active = false;
+                }
+            }
+            else
+            {
+                if (y + yDirection >= Program.grid.height)
+                {
+                    yDirection *= -1;
+                    y = Program.grid.height;
+                    y += yDirection;
+                }
+            }
+            if (x + xDirection < 0)
+            {
+
+                xDirection *= -1;
+                x = 0;
+
+            }
+            if (x + xDirection >= Program.grid.length)
+            {
+                xDirection *= -1;
+                x = Program.grid.length;
+                x += xDirection;
+            }
+        }
+        public void PlayerCollision()
+        {
+            foreach (Player player in Program.players)
+            {
+                if (y + yDirection == player.y
+                 && x <= player.batPos[player.batPos.Count - 1]
+                 && x >= player.batPos[0]
+                    || y + yDirection == player.y
+                    && x + xDirection <= player.batPos[player.batPos.Count - 1]
+                    && x + xDirection >= player.batPos[0]
+                   )
+                {
+
+                    if (x >= player.batPos[((player.batPos.Count - 1) * 6 / 10)])
+                    {
+                        xDirection = 1;
+                        if (x >= player.batPos[((player.batPos.Count - 1) * 8 / 10)])
+                        {
+                            xDirection = 2;
+                            if (x >= player.batPos[((player.batPos.Count - 1))])
+                            {
+
+                                xDirection = 3;
+
+                            }
+                        }
+                    }
+                    else
+                        if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
+                        {
+                            xDirection = -1;
+                            if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
+                            {
+                                xDirection = -2;
+                                if (x <= player.batPos[((player.batPos.Count - 1) / 10)])
+                                {
+
+                                    xDirection = -3;
+
+                                }
+                            }
+                        }
+                        else
+                        {
+                            xDirection = 0;
+                        }
+                    yDirection *= -1;
+
+                }
+
+
+            }
+        }
         public void Update()
         {
             while (active)
@@ -51,107 +156,12 @@ namespace pong
                 {
                     Program.grid.set(x, y, " ");
                 }
-                foreach (Player player in Program.players)
-                {
-                    if (y + yDirection == player.y
-                     && x <= player.batPos[player.batPos.Count - 1]
-                     && x >= player.batPos[0]
-                        || y + yDirection == player.y
-                        && x + xDirection <= player.batPos[player.batPos.Count - 1]
-                        && x + xDirection >= player.batPos[0]
-                       )
-                    {
 
-                        if (x >= player.batPos[((player.batPos.Count - 1) * 6 / 10)])
-                        {
-                            xDirection = 1;
-                            if (x >= player.batPos[((player.batPos.Count - 1) * 8 / 10)])
-                            {
-                                xDirection = 2;
-                                if (x >= player.batPos[((player.batPos.Count - 1))])
-                                {
-
-                                    xDirection = 3;
-
-                                }
-                            }
-                        }
-                        else
-                            if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
-                            {
-                                xDirection = -1;
-                                if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
-                                {
-                                    xDirection = -2;
-                                    if (x <= player.batPos[((player.batPos.Count - 1) / 10)])
-                                    {
-
-                                        xDirection = -3;
-
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                xDirection = 0;
-                            }
-                        yDirection *= -1;
-
-                    }
+                PlayerCollision();
 
 
-                }
-                if (scoringActive)
-                {
-                    if (y + yDirection < 0)
-                    {
-                        Program.playerTwoScore += 1;
-                        Program.grid.set(x, y, " ");
-                        active = false;
-
-                    }
-                }
-                else
-                {
-                    if (y + yDirection < 0)
-                    {
-                        yDirection *= -1;
-                        y = 0;
-
-                    }
-                }
-                if (scoringActive)
-                {
-                    if (y + yDirection >= Program.grid.height)
-                    {
-                        Program.playerOneScore += 1;
-                        Program.grid.set(x, y, " ");
-                        active = false;
-                    }
-                }
-                else
-                {
-                    if (y + yDirection >= Program.grid.height)
-                    {
-                        yDirection *= -1;
-                        y = Program.grid.height;
-                        y += yDirection;
-                    }
-                }
-                if (x + xDirection < 0)
-                {
-
-                    xDirection *= -1;
-                    x = 0;
-
-                }
-                if (x + xDirection >= Program.grid.length)
-                {
-                    xDirection *= -1;
-                    x = Program.grid.length;
-                    x += xDirection;
-                }
-
+                WallCollision();
+                
                 x += xDirection;
                 y += yDirection;
                 foreach (Player player in Program.players)
@@ -172,6 +182,7 @@ namespace pong
 
                 Thread.Sleep(50);
             }
+            
 
         }
 
