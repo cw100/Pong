@@ -13,6 +13,7 @@ namespace pong
         int x;
         int y;
         public bool updated=true;
+        
         public GridBox(int xLocation, int yLocation)
        {
             icon = " ";
@@ -21,10 +22,19 @@ namespace pong
        }
         public void Update()
        {
-           if (updated == true)
+           if (updated == true && Program.inUse == false)
            {
-               Console.SetCursorPosition(x, y);
-               Console.Write(icon);
+               do
+               {
+                   if (Program.inUse == false)
+                   {
+                       Program.inUse = true;
+                       Console.SetCursorPosition(x, y);
+                       Console.Write(icon);
+                       Program.inUse = false;
+                   }
+               }
+               while (Program.inUse);
                updated = false;
            }
        }

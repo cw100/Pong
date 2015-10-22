@@ -30,8 +30,8 @@ namespace pong
             yDirection = ydirection;
         }
         bool inPlayer = false;
-
-        public void WallCollision()
+        int extraDistance=0;
+        public bool WallCollision()
         {
             if (scoringActive)
             {
@@ -40,7 +40,7 @@ namespace pong
                     Program.playerTwoScore += 1;
                     Program.grid.set(x, y, " ");
                     active = false;
-
+                    return true;
                 }
             }
             else
@@ -49,7 +49,7 @@ namespace pong
                 {
                     yDirection *= -1;
                     y = 0;
-
+                    return true;
                 }
             }
             if (scoringActive)
@@ -59,6 +59,7 @@ namespace pong
                     Program.playerOneScore += 1;
                     Program.grid.set(x, y, " ");
                     active = false;
+                    return true;
                 }
             }
             else
@@ -68,21 +69,40 @@ namespace pong
                     yDirection *= -1;
                     y = Program.grid.height;
                     y += yDirection;
+                    return true;
                 }
             }
             if (x + xDirection < 0)
             {
 
+                extraDistance =  -(x + xDirection);
                 xDirection *= -1;
                 x = 0;
+                x += extraDistance;
+                
+                
+                
+                return true;
 
             }
             if (x + xDirection >= Program.grid.length)
             {
+                if (Program.grid.length - (x + xDirection) != 0)
+                {
+                    extraDistance = Program.grid.length - (x + xDirection) ;
+                }
+                else
+                {
+                    extraDistance = -1;
+                }
                 xDirection *= -1;
                 x = Program.grid.length;
-                x += xDirection;
+                x += extraDistance;
+                
+                return true;
             }
+
+            return false;
         }
         public void PlayerCollision()
         {
@@ -94,6 +114,9 @@ namespace pong
                     || y + yDirection == player.y
                     && x + xDirection <= player.batPos[player.batPos.Count - 1]
                     && x + xDirection >= player.batPos[0]
+                    || y  == player.y
+                    && x  <= player.batPos[player.batPos.Count - 1]
+                    && x  >= player.batPos[0]
                    )
                 {
 
@@ -152,17 +175,18 @@ namespace pong
                         inPlayer = true;
                     }
                 }
-                if (!inPlayer)
-                {
                     Program.grid.set(x, y, " ");
-                }
 
+                   
                 PlayerCollision();
 
 
-                WallCollision();
-                
-                x += xDirection;
+                if (!WallCollision())
+                {
+
+                    x += xDirection;
+                }
+
                 y += yDirection;
                 foreach (Player player in Program.players)
                 {
@@ -171,16 +195,24 @@ namespace pong
                      && x >= player.batPos[0]
                        )
                     {
-                        inPlayer = true;
+                        PlayerCollision();
+
+                        if (!WallCollision())
+                        {
+
+                            x += xDirection;
+                        }
+
+                        y += yDirection;
                     }
                 }
-                inPlayer = false;
+
                 if (!inPlayer && active)
                 {
                     Program.grid.set(x, y, ballString);
                 }
 
-                Thread.Sleep(50);
+                Thread.Sleep(10);
             }
             
 

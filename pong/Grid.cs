@@ -37,7 +37,7 @@ namespace pong
             }
             else
             {
-                throw Exception("dskfj");
+                throw Exception("");
         }
         }
         public void set(int x, int y)
@@ -50,7 +50,7 @@ namespace pong
             }
             else
             {
-                throw Exception("dskfj");
+                throw Exception("");
             }
         }
 

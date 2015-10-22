@@ -103,7 +103,7 @@ namespace pong
 
 
                     direction = 0;
-                    Thread.Sleep(10);
+                    Thread.Sleep(0);
                 
                 
             }
@@ -120,6 +120,7 @@ namespace pong
             {
                 if (Program.balls.Count != 0)
                 {
+                    
                     try
                     {
                         if( playerNum == 1)
@@ -131,7 +132,7 @@ namespace pong
                             {
                                 aiHitPos = aiRand.Next(0, batPos.Count-1);
 
-                                targetX = Program.balls[0].x + (Program.balls[0].xDirection * ( y-Program.balls[0].y ) );
+                                targetX = Program.balls[0].x + (Program.balls[0].xDirection * (y - Program.balls[0].y) );
 
                                 if (targetX < 0)
                                 {
@@ -139,7 +140,8 @@ namespace pong
                                 } 
                                 if (targetX > Program.grid.length)
                                 {
-                                    targetX = Program.grid.length - (targetX - Program.grid.length)-2;
+                                    targetX = Program.grid.length - (targetX - Program.grid.length);
+                                   
                                 }
                                 if (targetX < 0)
                                 {
@@ -165,11 +167,13 @@ namespace pong
 
                                 if (targetX < 0)
                                 {
+                                   
                                     targetX *= -1;
-                                } 
+                                }
                                 if (targetX > Program.grid.length)
                                 {
-                                    targetX = Program.grid.length - (targetX - Program.grid.length)-2;
+                                    targetX = Program.grid.length - (targetX - Program.grid.length);
+                                    
                                 }
                                 if (targetX < 0)
                                 {
