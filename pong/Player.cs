@@ -68,14 +68,20 @@ namespace pong
         public void Update()
         {
 
-            Thread.Sleep(1);
+            Thread.Sleep(15);
             if (batPos[batPos.Count - 1] + direction < Program.grid.length && batPos[0] + direction >= 0)
             {
 
                 if (direction == 1)
                 {
-
-                    Program.grid.set(batPos[0], y, "  ");
+                    if (batPos[0] - 1 > 0)
+                    {
+                        Program.grid.set(batPos[0] - 1, y, "  ");
+                    }
+                    else
+                    {
+                        Program.grid.set(batPos[0], y, "  ");
+                    }
                     batPos.Add(batPos[batPos.Count - 1] + 1);
 
                     batPos.RemoveAt(0);
@@ -107,13 +113,13 @@ namespace pong
 
         Random aiRand = new Random();
         int aiHitPos = 0;
-        int targetX = 0;
+       public int targetX = 0;
         public bool targetChosen = false;
         public void Ai()
         {
             while (true)
             {
-                Thread.Sleep(0);
+                Thread.Sleep(1);
                 if (Program.balls.Count != 0)
                 {
 
@@ -126,24 +132,29 @@ namespace pong
 
                                 if (targetChosen == false)
                                 {
-                                    aiHitPos = aiRand.Next(0, batPos.Count - 1);
+                                    if (aiHitPos < (batPos.Count) / 2)
+                                    {
+                                        aiHitPos = aiRand.Next((batPos.Count) / 2, batPos.Count - 1);
+                                    }
+                                    else
+                                    {
+                                        aiHitPos = aiRand.Next(0, (batPos.Count - 1) / 2);
+                                    }
 
                                     targetX = Program.balls[0].x + (Program.balls[0].xDirection * (y - Program.balls[0].y));
-
-                                    if (targetX < 0)
+                                    while (targetX > Program.grid.length || targetX < 0)
                                     {
-                                        targetX *= -1;
-                                    }
-                                    if (targetX > Program.grid.length)
-                                    {
-                                        targetX = Program.grid.length - (targetX - Program.grid.length);
+                                        if (targetX < 0)
+                                        {
+                                            targetX *= -1;
+                                        }
+                                        if (targetX > Program.grid.length)
+                                        {
+                                            targetX = Program.grid.length - (targetX - Program.grid.length);
 
+                                        }
                                     }
-                                    if (targetX < 0)
-                                    {
-                                        targetX *= -1;
-                                    }
-
+                               
 
 
                                     targetChosen = true;
@@ -157,25 +168,31 @@ namespace pong
 
                                 if (targetChosen == false)
                                 {
-                                    aiHitPos = aiRand.Next(0, batPos.Count - 1);
+                                    if (aiHitPos < (batPos.Count ) / 2)
+                                    {
+                                        aiHitPos = aiRand.Next((batPos.Count ) / 2, batPos.Count - 1);
+                                    }
+                                    else
+                                    {
+                                        aiHitPos = aiRand.Next(0, (batPos.Count - 1) / 2);
+                                    }
 
                                     targetX = Program.balls[0].x + (Program.balls[0].xDirection * (Program.balls[0].y - y));
 
-                                    if (targetX < 0)
+                                    while (targetX > Program.grid.length || targetX < 0)
                                     {
+                                        if (targetX < 0)
+                                        {
+                                            targetX *= -1;
+                                        }
+                                        if (targetX > Program.grid.length)
+                                        {
+                                            targetX = Program.grid.length - (targetX - Program.grid.length);
 
-                                        targetX *= -1;
-                                    }
-                                    if (targetX > Program.grid.length)
-                                    {
-                                        targetX = Program.grid.length - (targetX - Program.grid.length);
-
-                                    }
-                                    if (targetX < 0)
-                                    {
-                                        targetX *= -1;
+                                        }
                                     }
 
+                                
 
 
                                     targetChosen = true;

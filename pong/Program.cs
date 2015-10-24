@@ -10,7 +10,7 @@ namespace pong
 {
     class Program
     {
-        static Thread scoreThread;
+      
         public static Player playerStart;
         static List<Thread> playerThreads;
         public static Grid grid;
@@ -41,6 +41,25 @@ namespace pong
             ballThread.Start();
 
         }
+        static void AddBall(int x)
+        {
+            if (playerOneScore >= playerTwoScore)
+            {
+                ball = new Ball(x,grid.height - 4 , -1, "O");
+            }
+            else
+            {
+                ball = new Ball(x, 3, 1, "O");
+            }
+            balls.Add(ball);
+            Thread ballThread = new Thread(() => BallUpdate(ball));
+
+
+            ballThreads.Add(ballThread);
+
+            ballThread.Start();
+
+        }
         static void BallUpdate(Ball ball)
         {
             while (ball.active)
@@ -58,9 +77,7 @@ namespace pong
             }
             Thread.CurrentThread.Abort();
         }
-        static void GridUpdate()
-        { 
-}
+
         static void DrawScore()
         {
                          
@@ -70,12 +87,15 @@ namespace pong
                     
              }
         static bool active = true;
+        static int width, height;
         static void Main(string[] args)
         {
             Console.Title = "Pong";
-            Console.SetWindowSize(100, 25);
+            height = 30;
+            width = 90;
+            Console.SetWindowSize(width, height);
 
-            Console.SetBufferSize(100, 25);
+            Console.SetBufferSize(width, height);
             grid = new Grid(Console.WindowWidth - 20, Console.WindowHeight);
             Console.CursorVisible = false;
             balls = new List<Ball>();
@@ -112,7 +132,8 @@ namespace pong
 
                 if (balls.Count < 1)
                 {
-                    AddBall(grid.length / 2 + balls.Count, grid.height / 2);
+                   
+                    AddBall(grid.length / 2 + balls.Count);
                 }
 
                 if (playerOneScore > 9 || playerTwoScore > 9)

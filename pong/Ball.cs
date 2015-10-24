@@ -26,7 +26,7 @@ namespace pong
             y = intY;
             Speed = 100;
             ballString = ballstring;
-            xDirection = rand.Next(-3, 3);
+            xDirection = rand.Next(-2, 2);
             yDirection = ydirection;
         }
         bool inPlayer = false;
@@ -131,14 +131,18 @@ namespace pong
                     if (x >= player.batPos[((player.batPos.Count - 1) * 6 / 10)])
                     {
                         xDirection = 1;
-                        if (x >= player.batPos[((player.batPos.Count - 1) * 8 / 10)])
+                        if (x >= player.batPos[((player.batPos.Count - 1) * 7 / 10)])
                         {
                             xDirection = 2;
-                            if (x >= player.batPos[((player.batPos.Count - 1))])
+                            if (x >= player.batPos[((player.batPos.Count - 1) * 8 / 10)])
                             {
-
                                 xDirection = 3;
+                                if (x >= player.batPos[((player.batPos.Count - 1))])
+                                {
 
+                                    xDirection = 4;
+
+                                }
                             }
                         }
                     }
@@ -146,13 +150,19 @@ namespace pong
                         if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
                         {
                             xDirection = -1;
-                            if (x <= player.batPos[((player.batPos.Count - 1) * 4 / 10)])
+                            if (x <= player.batPos[((player.batPos.Count - 1) * 3 / 10)])
                             {
                                 xDirection = -2;
-                                if (x <= player.batPos[((player.batPos.Count - 1) / 10)])
+                                if (x <= player.batPos[((player.batPos.Count - 1) *2/ 10)])
                                 {
 
                                     xDirection = -3;
+                                    if (x <= player.batPos[((player.batPos.Count - 1)  / 10)])
+                                    {
+
+                                        xDirection = -4;
+
+                                    }
 
                                 }
                             }
@@ -217,14 +227,16 @@ namespace pong
                         y += yDirection;
                     }
                 }
-
-                Program.grid.set(preX, preY, " ");
+              
+                
+                    Program.grid.set(preX, preY, " ");
+                
                 if (!inPlayer && active)
                 {
                   
                     Program.grid.set(x, y, ballString);
                 }
-                Thread.Sleep(10);
+                Thread.Sleep(30);
                 
             }
             
