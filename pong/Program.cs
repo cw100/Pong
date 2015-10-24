@@ -21,6 +21,7 @@ namespace pong
         static Ball ball;
         static List<Thread> ballThreads;
         public static bool inUse=false;
+
         static void AddBall(int x, int y)
         {
             if (playerOneScore >= playerTwoScore)
@@ -57,30 +58,24 @@ namespace pong
             }
             Thread.CurrentThread.Abort();
         }
+        static void GridUpdate()
+        { 
+}
         static void DrawScore()
         {
-            
-            do
-            {
-                Thread.Sleep(50);
-                if (inUse == false)
-                {
-                    inUse = true;
+                         
                     Console.SetCursorPosition(Console.WindowWidth - 10, Console.WindowHeight / 2);
 
                     Console.Write(playerOneScore + "-" + playerTwoScore);
-                    inUse = false;
-                }
-            }
-            while (inUse);
+                    
              }
         static bool active = true;
         static void Main(string[] args)
         {
             Console.Title = "Pong";
-            Console.SetWindowSize(70, 30);
+            Console.SetWindowSize(100, 25);
 
-            Console.SetBufferSize(70, 30);
+            Console.SetBufferSize(100, 25);
             grid = new Grid(Console.WindowWidth - 20, Console.WindowHeight);
             Console.CursorVisible = false;
             balls = new List<Ball>();
@@ -112,10 +107,8 @@ namespace pong
             }
             while (active)
             {
-
-                grid.Update();
-
                 DrawScore();
+                grid.Update();
 
                 if (balls.Count < 1)
                 {
@@ -126,6 +119,7 @@ namespace pong
                 {
                     active = false;
                 }
+                
             }
             int winningPlayer;
             if (playerOneScore > playerTwoScore)

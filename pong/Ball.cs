@@ -26,7 +26,7 @@ namespace pong
             y = intY;
             Speed = 100;
             ballString = ballstring;
-            xDirection = rand.Next(-1, 2);
+            xDirection = rand.Next(-3, 3);
             yDirection = ydirection;
         }
         bool inPlayer = false;
@@ -40,6 +40,10 @@ namespace pong
                     Program.playerTwoScore += 1;
                     Program.grid.set(x, y, " ");
                     active = false;
+                    foreach (Player player in Program.players)
+                    {
+                        player.targetChosen = false;
+                    }
                     return true;
                 }
             }
@@ -59,6 +63,10 @@ namespace pong
                     Program.playerOneScore += 1;
                     Program.grid.set(x, y, " ");
                     active = false;
+                    foreach (Player player in Program.players)
+                    {
+                        player.targetChosen = false;
+                    }
                     return true;
                 }
             }
@@ -160,10 +168,14 @@ namespace pong
 
             }
         }
+        int preX;
+        int preY;
         public void Update()
         {
             while (active)
             {
+                preX = x;
+                preY = y;
                 inPlayer = false;
                 foreach (Player player in Program.players)
                 {
@@ -175,8 +187,7 @@ namespace pong
                         inPlayer = true;
                     }
                 }
-                    Program.grid.set(x, y, " ");
-
+                
                    
                 PlayerCollision();
 
@@ -207,12 +218,14 @@ namespace pong
                     }
                 }
 
+                Program.grid.set(preX, preY, " ");
                 if (!inPlayer && active)
                 {
+                  
                     Program.grid.set(x, y, ballString);
                 }
-
                 Thread.Sleep(10);
+                
             }
             
 

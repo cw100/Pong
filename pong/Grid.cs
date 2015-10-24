@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Threading;
 namespace pong
 {
     class Grid
@@ -15,6 +15,7 @@ namespace pong
         {
             length = l;
             height = h;
+            grid = new List<GridBox>();
             grid = new List<GridBox>();
             for(int i=0; i <height;i++)
             {
@@ -29,11 +30,11 @@ namespace pong
         {
             if (0 <= x && x < length && 0 <= y && y < height)
             {
-
+             
                 grid[x + (y * length)].lastIcon = grid[x + (y * length)].icon;
                 grid[x + (y * length)].icon = str;
-                
                 grid[x + (y * length)].updated = true;
+                
             }
             else
             {
@@ -60,6 +61,7 @@ namespace pong
         }
         public void Update()
         {
+            Thread.Sleep(1);
             foreach(GridBox gB in grid)
             {
                 gB.Update();
